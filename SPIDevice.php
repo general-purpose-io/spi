@@ -7,7 +7,7 @@ use GeneralPurposeIO\SPI\Drivers\SPIDriver;
 class SPIDevice
 {
     public function __construct(
-        public readonly int $chip,
+        protected $chip,
         protected SPIDriver $driver
     ) {}
 

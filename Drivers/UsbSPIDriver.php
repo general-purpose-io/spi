@@ -13,7 +13,12 @@ class UsbSPIDriver extends SPIDriver
         protected readonly MPSSEContext $context,
     ) {}
 
-    public function read(int $chip_select, int $len): array|false
+    /**
+     * @param int $chip_select
+     * @param int $len
+     * @return array|false
+     */
+    public function read($chip_select, int $len): array|false
     {
         $this->toggleChip($chip_select);
         MPSSE::start($this->context);
@@ -23,7 +28,12 @@ class UsbSPIDriver extends SPIDriver
         return is_null($rx) ? false : bytes2array($rx);
     }
 
-    public function write(int $chip_select, array|string $data): int
+    /**
+     * @param int $chip_select
+     * @param array|string $data
+     * @return int
+     */
+    public function write($chip_select, array|string $data): int
     {
         $this->toggleChip($chip_select);
 
@@ -38,7 +48,12 @@ class UsbSPIDriver extends SPIDriver
         return $result === 0 ? strlen($data) : -1;
     }
 
-    public function transfer(int $chip_select, array|string $data): array|false
+    /**
+     * @param int $chip_select
+     * @param array|string $data
+     * @return array|false
+     */
+    public function transfer($chip_select, array|string $data): array|false
     {
         $this->toggleChip($chip_select);
 

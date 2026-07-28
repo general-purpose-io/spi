@@ -32,4 +32,9 @@ class UsbSPIBus extends SPIBus
         $driver = new UsbDigitalIODriver($this->driver->getContext());
         return new DigitalOutputPin($pin, $driver);
     }
+
+    public function canServeDigitalPins(): bool
+    {
+        return true;
+    }
 }
