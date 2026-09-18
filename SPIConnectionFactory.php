@@ -1,12 +1,11 @@
 <?php
 
-namespace GeneralPurposeIO\SPI\Factory;
+namespace GeneralPurposeIO\SPI;
 
-use GeneralPurposeIO\Contracts\SPI\SPIDriver;
-use GeneralPurposeIO\Contracts\SPI\SPIEndianness;
 use GeneralPurposeIO\Contracts\SPI\SPIMode;
+use GeneralPurposeIO\Contracts\SPI\SPIEndianness;
 
-abstract class SPIFactory
+abstract class SPIConnectionFactory
 {
     public SPIMode $spi_mode = SPIMode::MODE_0;
 
@@ -14,8 +13,16 @@ abstract class SPIFactory
 
     public SPIEndianness $endianness = SPIEndianness::MSB;
 
-    abstract protected function assertReady(): void;
-    abstract public function driver(): SPIDriver;
+    public int $chip_select = 0;
+
+    public function __construct(
+        public string|int $device,
+        protected SPIConnectionDriver $driver
+    ) {}
+
+    abstract protected function device(): mixed;
+    abstract public function getHandle(): mixed;
+    abstract public function chipSelect(int $chip_select): static;
 
     public function mode(SPIMode|int $value): static
     {
@@ -40,4 +47,10 @@ abstract class SPIFactory
 
         return $this;
     }
+
+    public function register(): SPIConnectionDriver
+    {
+        return $this->driver->register($this->device, $this->getHandle());
+    }
+
 }
