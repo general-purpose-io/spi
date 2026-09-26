@@ -48,9 +48,21 @@ abstract class SPIConnectionFactory
         return $this;
     }
 
-    public function register(): SPIConnectionDriver
+    /** What this connection is opened with, as a worker needs it to open the same bus the same way. */
+    public function settings(): SPIBusSettings
     {
-        return $this->driver->register($this->device, $this->getHandle());
+        return new SPIBusSettings($this->spi_mode, $this->speed, $this->endianness);
     }
 
+    /** Takes every setting from $settings: a worker opening a bus the way the process that queued the job did. */
+    public function configure(SPIBusSettings $settings): static
+    {
+        return $this->mode($settings->mode)->speed($settings->speed)->endianness($settings->endianness);
+    }
+
+    /** Opens the bus and registers it, with the settings it was opened with. */
+    public function register(): SPIConnectionDriver
+    {
+        return $this->driver->register($this->device, $this->getHandle())->configuredWith($this->device, $this->settings());
+    }
 }

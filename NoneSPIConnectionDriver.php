@@ -3,7 +3,6 @@
 namespace GeneralPurposeIO\SPI;
 
 use GeneralPurposeIO\Contracts\SPI\SPIException;
-use GeneralPurposeIO\Contracts\SPI\SPITransport;
 
 /** The driver an app gets when no adapter package is configured: every open attempt says so. */
 class NoneSPIConnectionDriver extends SPIConnectionDriver
@@ -17,4 +16,7 @@ class NoneSPIConnectionDriver extends SPIConnectionDriver
     {
         throw SPIException::noDriverConfigured();
     }
+
+    /** newConnection() never succeeds, so there is never a handle to close. */
+    protected function closeConnection(mixed $handle): void {}
 }
