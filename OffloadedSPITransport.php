@@ -12,7 +12,7 @@ final class OffloadedSPITransport implements OffloadedSPI
 {
     public function __construct(
         private readonly SPITransport $transport,
-        private readonly ?string $target,
+        private readonly ?string $pool,
     ) {}
 
     public function write(array|string $data): Promise
@@ -37,6 +37,6 @@ final class OffloadedSPITransport implements OffloadedSPI
 
     public function run(BusJob $job): Promise
     {
-        return $this->transport->offload($job, $this->target);
+        return $this->transport->offload($job, $this->pool);
     }
 }

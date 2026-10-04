@@ -176,16 +176,15 @@ abstract class SPIConnectionDriver
     }
 
     /**
-     * An SPIBusGig to the named work target, or to the configured one, carrying the bus settings and the slave's clock
-     * so a worker opens the bus the way this process did. In-process targets (sync, defer) run it on this process's
-     * own worker-side driver, as a worker would.
+     * An SPIBusGig to the named worker pool, or to the default one, carrying the bus settings and the slave's clock
+     * so a worker opens the bus the way this process did.
      */
-    protected function dispatch(string|int $device, int $chip_select, BusJob $job, ?string $target, Loop $loop, BusQueue $queue): Promise
+    protected function dispatch(string|int $device, int $chip_select, BusJob $job, ?string $pool, Loop $loop, BusQueue $queue): Promise
     {
         $settings = $this->settings[(string) $device] ?? throw SPIException::busSettingsUnknown($device);
         $clock = ($this->transports["{$device}:{$chip_select}"] ?? null)?->clock();
 
-        return $this->runGig(new SPIBusGig(static::class, $device, $chip_select, $settings, $clock, $job), $target);
+        return $this->runGig(new SPIBusGig(static::class, $device, $chip_select, $settings, $clock, $job), $pool);
     }
 
     protected function protocolException(): string

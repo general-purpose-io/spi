@@ -3,10 +3,10 @@
 namespace GeneralPurposeIO\SPI;
 
 use GeneralPurposeIO\Contracts\NutsAndBolts\BusJob;
-use Voyager\Contracts\IOPools\ShouldPool;
+use Voyager\Contracts\IOPools\WorkerPools\ShouldPool;
 
 /**
- * One SPI bus job, wherever the work target runs it. The worker builds the driver by class, connects the bus with
+ * One SPI bus job, wherever the worker pool runs it. The worker builds the driver by class, connects the bus with
  * the settings it was registered with where the job was queued, and runs the slave at the clock it had there.
  * One driver per class per process, so a worker keeps its buses open between gigs and reconnects one only when the
  * settings changed.

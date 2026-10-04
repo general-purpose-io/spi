@@ -69,19 +69,19 @@ abstract class SPITransport implements TransportContract
         return $this;
     }
 
-    public function via(?string $target = null): OffloadedSPITransport
+    public function via(?string $pool = null): OffloadedSPITransport
     {
         $this->ensureOffloadable();
 
-        return new OffloadedSPITransport($this, $target);
+        return new OffloadedSPITransport($this, $pool);
     }
 
     /** Wire-internal: how a via() handle queues a job, checked again at every call so a handle outlives nothing. */
-    public function offload(BusJob $job, ?string $target): Promise
+    public function offload(BusJob $job, ?string $pool): Promise
     {
         $this->ensureOffloadable();
 
-        return $this->driver->offload($this->device, $this->chip_select, $job, $target);
+        return $this->driver->offload($this->device, $this->chip_select, $job, $pool);
     }
 
     /**
